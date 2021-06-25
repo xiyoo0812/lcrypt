@@ -18,100 +18,100 @@ extern "C" {
 
 static int lrandomkey(lua_State *L)
 {
-	char tmp[8];
-	int i;
-	for (i=0;i<8;i++)
+    char tmp[8];
+    int i;
+    for (i=0;i<8;i++)
     {
-		tmp[i] = rand() & 0xff;
-	}
-	lua_pushlstring(L, tmp, 8);
-	return 1;
+        tmp[i] = rand() & 0xff;
+    }
+    lua_pushlstring(L, tmp, 8);
+    return 1;
 }
 
 static void hash(const char * str, int sz, char key[8])
 {
-	long djb_hash = 5381L;
-	long js_hash = 1315423911L;
-	int i;
-	for (i=0;i<sz;i++)
+    long djb_hash = 5381L;
+    long js_hash = 1315423911L;
+    int i;
+    for (i=0;i<sz;i++)
     {
-		char c = (char)str[i];
-		djb_hash += (djb_hash << 5) + c;
-		js_hash ^= ((js_hash << 5) + c + (js_hash >> 2));
-	}
+        char c = (char)str[i];
+        djb_hash += (djb_hash << 5) + c;
+        js_hash ^= ((js_hash << 5) + c + (js_hash >> 2));
+    }
 
-	key[0] = djb_hash & 0xff;
-	key[1] = (djb_hash >> 8) & 0xff;
-	key[2] = (djb_hash >> 16) & 0xff;
-	key[3] = (djb_hash >> 24) & 0xff;
+    key[0] = djb_hash & 0xff;
+    key[1] = (djb_hash >> 8) & 0xff;
+    key[2] = (djb_hash >> 16) & 0xff;
+    key[3] = (djb_hash >> 24) & 0xff;
 
-	key[4] = js_hash & 0xff;
-	key[5] = (js_hash >> 8) & 0xff;
-	key[6] = (js_hash >> 16) & 0xff;
-	key[7] = (js_hash >> 24) & 0xff;
+    key[4] = js_hash & 0xff;
+    key[5] = (js_hash >> 8) & 0xff;
+    key[6] = (js_hash >> 16) & 0xff;
+    key[7] = (js_hash >> 24) & 0xff;
 }
 
 static int lhashkey(lua_State *L)
 {
-	size_t sz = 0;
-	const char * key = luaL_checklstring(L, 1, &sz);
-	char realkey[8];
-	hash(key,(int)sz,realkey);
-	lua_pushlstring(L, (const char *)realkey, 8);
-	return 1;
+    size_t sz = 0;
+    const char * key = luaL_checklstring(L, 1, &sz);
+    char realkey[8];
+    hash(key,(int)sz,realkey);
+    lua_pushlstring(L, (const char *)realkey, 8);
+    return 1;
 }
 
 static int ltohex(lua_State *L)
 {
-	static char hex[] = "0123456789abcdef";
-	size_t sz = 0;
-	const char * text = (const char *)luaL_checklstring(L, 1, &sz);
-	char tmp[SMALL_CHUNK];
-	char *buffer = tmp;
-	if (sz > SMALL_CHUNK/2)
+    static char hex[] = "0123456789abcdef";
+    size_t sz = 0;
+    const char * text = (const char *)luaL_checklstring(L, 1, &sz);
+    char tmp[SMALL_CHUNK];
+    char *buffer = tmp;
+    if (sz > SMALL_CHUNK/2)
     {
-		buffer = (char *)lua_newuserdata(L, sz * 2);
-	}
-	int i;
-	for (i=0;i<sz;i++)
+        buffer = (char *)lua_newuserdata(L, sz * 2);
+    }
+    int i;
+    for (i=0;i<sz;i++)
     {
-		buffer[i*2] = hex[text[i] >> 4];
-		buffer[i*2+1] = hex[text[i] & 0xf];
-	}
-	lua_pushlstring(L, buffer, sz * 2);
-	return 1;
+        buffer[i*2] = hex[text[i] >> 4];
+        buffer[i*2+1] = hex[text[i] & 0xf];
+    }
+    lua_pushlstring(L, buffer, sz * 2);
+    return 1;
 }
 
 #define HEX(v,c) { char tmp = (char) c; if (tmp >= '0' && tmp <= '9') { v = tmp-'0'; } else { v = tmp - 'a' + 10; } }
 
 static int lfromhex(lua_State *L)
 {
-	size_t sz = 0;
-	const char * text = luaL_checklstring(L, 1, &sz);
-	if (sz & 2)
+    size_t sz = 0;
+    const char * text = luaL_checklstring(L, 1, &sz);
+    if (sz & 2)
     {
-		return luaL_error(L, "Invalid hex text size %d", (int)sz);
-	}
-	char tmp[SMALL_CHUNK];
-	char *buffer = tmp;
-	if (sz > SMALL_CHUNK*2)
+        return luaL_error(L, "Invalid hex text size %d", (int)sz);
+    }
+    char tmp[SMALL_CHUNK];
+    char *buffer = tmp;
+    if (sz > SMALL_CHUNK*2)
     {
-		buffer = (char *)lua_newuserdata(L, sz / 2);
-	}
-	int i;
-	for (i=0;i<sz;i+=2)
+        buffer = (char *)lua_newuserdata(L, sz / 2);
+    }
+    int i;
+    for (i=0;i<sz;i+=2)
     {
-		char hi,low;
-		HEX(hi, text[i]);
-		HEX(low, text[i+1]);
-		if (hi > 16 || low > 16)
+        char hi,low;
+        HEX(hi, text[i]);
+        HEX(low, text[i+1]);
+        if (hi > 16 || low > 16)
         {
-			return luaL_error(L, "Invalid hex text", text);
-		}
-		buffer[i/2] = hi<<4 | low;
-	}
-	lua_pushlstring(L, buffer, i/2);
-	return 1;
+            return luaL_error(L, "Invalid hex text", text);
+        }
+        buffer[i/2] = hi<<4 | low;
+    }
+    lua_pushlstring(L, buffer, i/2);
+    return 1;
 }
 
 static int lxxtea_encode(lua_State* L)
@@ -309,62 +309,62 @@ static int lz4_decode(lua_State* L)
 static int lsha1(lua_State* L)
 {
     size_t sz = 0;
-	const uint8_t* buffer = (const uint8_t*)luaL_checklstring(L, 1, &sz);
-	uint8_t digest[SHA1_DIGEST_SIZE];
-	SHA1_CTX ctx;
-	SHA1_Init(&ctx);
-	SHA1_Update(&ctx, buffer, sz);
-	SHA1_Final(digest, &ctx);
-	lua_pushlstring(L, (const char*)digest, SHA1_DIGEST_SIZE);
-	return 1;
+    const uint8_t* buffer = (const uint8_t*)luaL_checklstring(L, 1, &sz);
+    uint8_t digest[SHA1_DIGEST_SIZE];
+    SHA1_CTX ctx;
+    SHA1_Init(&ctx);
+    SHA1_Update(&ctx, buffer, sz);
+    SHA1_Final(digest, &ctx);
+    lua_pushlstring(L, (const char*)digest, SHA1_DIGEST_SIZE);
+    return 1;
 }
 
 static inline void xor_key(uint8_t key[SHA_BLOCKSIZE], uint32_t xorv)
 {
-	int i;
-	for (i=0;i<SHA_BLOCKSIZE;i+=sizeof(uint32_t)) 
+    int i;
+    for (i=0;i<SHA_BLOCKSIZE;i+=sizeof(uint32_t)) 
     {
-		uint32_t * k = (uint32_t*)&key[i];
-		*k ^= xorv;
-	}
+        uint32_t * k = (uint32_t*)&key[i];
+        *k ^= xorv;
+    }
 }
 
 static int lhmac_sha1(lua_State *L)
 {
-	size_t key_sz = 0;
-	const uint8_t* key = (const uint8_t*)luaL_checklstring(L, 1, &key_sz);
-	size_t text_sz = 0;
-	const uint8_t* text = (const uint8_t*)luaL_checklstring(L, 2, &text_sz);
-	SHA1_CTX ctx1, ctx2;
-	uint8_t digest1[SHA1_DIGEST_SIZE];
-	uint8_t digest2[SHA1_DIGEST_SIZE];
-	uint8_t rkey[SHA_BLOCKSIZE];
-	memset(rkey, 0, SHA_BLOCKSIZE);
+    size_t key_sz = 0;
+    const uint8_t* key = (const uint8_t*)luaL_checklstring(L, 1, &key_sz);
+    size_t text_sz = 0;
+    const uint8_t* text = (const uint8_t*)luaL_checklstring(L, 2, &text_sz);
+    SHA1_CTX ctx1, ctx2;
+    uint8_t digest1[SHA1_DIGEST_SIZE];
+    uint8_t digest2[SHA1_DIGEST_SIZE];
+    uint8_t rkey[SHA_BLOCKSIZE];
+    memset(rkey, 0, SHA_BLOCKSIZE);
 
-	if (key_sz > SHA_BLOCKSIZE)
+    if (key_sz > SHA_BLOCKSIZE)
     {
-		SHA1_CTX ctx;
-		SHA1_Init(&ctx);
-		SHA1_Update(&ctx, key, key_sz);
-		SHA1_Final(rkey, &ctx);
-		key_sz = SHA1_DIGEST_SIZE;
-	}
+        SHA1_CTX ctx;
+        SHA1_Init(&ctx);
+        SHA1_Update(&ctx, key, key_sz);
+        SHA1_Final(rkey, &ctx);
+        key_sz = SHA1_DIGEST_SIZE;
+    }
     else
     {
-		memcpy(rkey, key, key_sz);
-	}
-	xor_key(rkey, 0x5c5c5c5c);
-	SHA1_Init(&ctx1);
-	SHA1_Update(&ctx1, rkey, SHA_BLOCKSIZE);
-	xor_key(rkey, 0x5c5c5c5c ^ 0x36363636);
-	SHA1_Init(&ctx2);
-	SHA1_Update(&ctx2, rkey, SHA_BLOCKSIZE);
-	SHA1_Update(&ctx2, text, text_sz);
-	SHA1_Final(digest2, &ctx2);
-	SHA1_Update(&ctx1, digest2, SHA1_DIGEST_SIZE);
-	SHA1_Final(digest1, &ctx1);
-	lua_pushlstring(L, (const char *)digest1, SHA1_DIGEST_SIZE);
-	return 1;
+        memcpy(rkey, key, key_sz);
+    }
+    xor_key(rkey, 0x5c5c5c5c);
+    SHA1_Init(&ctx1);
+    SHA1_Update(&ctx1, rkey, SHA_BLOCKSIZE);
+    xor_key(rkey, 0x5c5c5c5c ^ 0x36363636);
+    SHA1_Init(&ctx2);
+    SHA1_Update(&ctx2, rkey, SHA_BLOCKSIZE);
+    SHA1_Update(&ctx2, text, text_sz);
+    SHA1_Final(digest2, &ctx2);
+    SHA1_Update(&ctx1, digest2, SHA1_DIGEST_SIZE);
+    SHA1_Final(digest1, &ctx1);
+    lua_pushlstring(L, (const char *)digest1, SHA1_DIGEST_SIZE);
+    return 1;
 }
 
 LCRYPT_API int luaopen_lcrypt(lua_State* L)
@@ -374,11 +374,11 @@ LCRYPT_API int luaopen_lcrypt(lua_State* L)
     luaL_Reg l[] = {
         { "md5", lmd5 },
         { "sha1", lsha1 },
-		{ "hmac_sha1", lhmac_sha1 },
+        { "hmac_sha1", lhmac_sha1 },
         { "hashkey", lhashkey },
-		{ "randomkey", lrandomkey },
+        { "randomkey", lrandomkey },
         { "hex_encode", ltohex },
-		{ "hex_decode", lfromhex },
+        { "hex_decode", lfromhex },
         { "des_encode", des56_crypt },
         { "des_encode", des56_decrypt },
         { "lz4_encode", lz4_encode },
