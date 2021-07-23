@@ -8,6 +8,7 @@
 #include "xxtea.h"
 #include "des56.h"
 #include "base64.h"
+#include "guid.h"
 #include "lcrypt.h"
 #include <memory.h>
 #include <string.h>
@@ -367,6 +368,106 @@ static int lhmac_sha1(lua_State *L)
     return 1;
 }
 
+static int lguid_new(lua_State* L) {
+    size_t group = 0, index = 0;
+    int top = lua_gettop(L);
+    if (top > 1) {
+        group = lua_tointeger(L, 1);
+        index = lua_tointeger(L, 2);
+    }
+    else if (top > 0) {
+        group = lua_tointeger(L, 1);
+        index = rand();
+    }
+    else {
+        group = rand();
+        index = rand();
+    }
+    size_t guid = new_guid(group, index);
+    lua_pushinteger(L, guid);
+    return 1;
+}
+
+static int lguid_string(lua_State* L) {
+    int group = 0, index = 0;
+    int top = lua_gettop(L);
+    if (top > 1) {
+        group = lua_tointeger(L, 1);
+        index = lua_tointeger(L, 2);
+    }
+    else if (top > 0) {
+        group = lua_tointeger(L, 1);
+        index = rand();
+    }
+    else {
+        group = rand();
+        index = rand();
+    }
+    char sguid[32];
+    size_t guid = new_guid(group, index);
+    snprintf(sguid, 32, "%llx", guid);
+    lua_pushstring(L, sguid);
+    return 1;
+}
+
+static int lguid_tostring(lua_State* L) {
+    char sguid[32];
+    size_t guid = lua_tointeger(L, 1);
+    snprintf(sguid, 32, "%llx", guid);
+    lua_pushstring(L, sguid);
+    return 1;
+}
+
+static int lguid_number(lua_State* L) {
+    char* chEnd = NULL;
+    const char* guid = lua_tostring(L, 1);
+    lua_pushinteger(L, strtoull(guid, &chEnd, 16));
+    return 1;
+}
+
+static int lguid_group(lua_State* L) {
+    size_t guid;
+    if (lua_type(L, 1) == LUA_TSTRING) {
+        char* chEnd = NULL;
+        const char* sguid = lua_tostring(L, 1);
+        guid = strtoull(sguid, &chEnd, 16);
+    }
+    else {
+        guid = lua_tointeger(L, 1);
+    }
+    lua_pushinteger(L, guid & 0x3ff);
+    return 1;
+}
+
+static int lguid_index(lua_State* L) {
+    size_t guid;
+    if (lua_type(L, 1) == LUA_TSTRING) {
+        char* chEnd = NULL;
+        const char* sguid = lua_tostring(L, 1);
+        guid = _strtoui64(sguid, &chEnd, 16);
+    }
+    else {
+        guid = lua_tointeger(L, 1);
+    }
+    lua_pushinteger(L, (guid >> GROUP_BITS) & 0x3ff);
+    return 1;
+}
+
+static int lguid_group_index(lua_State* L) {
+    size_t guid;
+    if (lua_type(L, 1) == LUA_TSTRING) {
+        char* chEnd = NULL;
+        const char* sguid = lua_tostring(L, 1);
+        guid = _strtoui64(sguid, &chEnd, 16);
+    }
+    else {
+        guid = lua_tointeger(L, 1);
+    }
+    lua_pushinteger(L, guid & 0x3ff);
+    lua_pushinteger(L, (guid >> GROUP_BITS) & 0x3ff);
+    return 2;
+}
+
 LCRYPT_API int luaopen_lcrypt(lua_State* L)
 {
     luaL_checkversion(L);
@@ -387,6 +488,14 @@ LCRYPT_API int luaopen_lcrypt(lua_State* L)
         { "b64_decode", lbase64_decode },
         { "xxtea_encode", lxxtea_encode },
         { "xxtea_decode", lxxtea_decode },
+        { "guid_new", lguid_new },
+        { "guid_string", lguid_string },
+        { "guid_tostring", lguid_tostring },
+        { "guid_number", lguid_number },
+        { "guid_group", lguid_group },
+        { "guid_index", lguid_index },
+        { "group_index", lguid_group_index },
+
         { NULL, NULL },
     };
 

@@ -1,21 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\lz4.c" />
-    <ClCompile Include="src\base64.c" />
-    <ClCompile Include="src\des56.c" />
     <ClCompile Include="src\lcrypt.c" />
-    <ClCompile Include="src\md5.c" />
-    <ClCompile Include="src\sha1.c" />
-    <ClCompile Include="src\xxtea.c" />
+    <ClCompile Include="src\base64.c">
+      <Filter>b64</Filter>
+    </ClCompile>
+    <ClCompile Include="src\des56.c">
+      <Filter>des</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lz4.c">
+      <Filter>lz4</Filter>
+    </ClCompile>
+    <ClCompile Include="src\md5.c">
+      <Filter>md5</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sha1.c">
+      <Filter>sha</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xxtea.c">
+      <Filter>xxtea</Filter>
+    </ClCompile>
+    <ClCompile Include="src\guid.c">
+      <Filter>guid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\lz4.h" />
-    <ClInclude Include="src\base64.h" />
-    <ClInclude Include="src\des56.h" />
-    <ClInclude Include="src\md5.h" />
-    <ClInclude Include="src\sha1.h" />
-    <ClInclude Include="src\xxtea.h" />
     <ClInclude Include="src\lcrypt.h" />
+    <ClInclude Include="src\base64.h">
+      <Filter>b64</Filter>
+    </ClInclude>
+    <ClInclude Include="src\des56.h">
+      <Filter>des</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lz4.h">
+      <Filter>lz4</Filter>
+    </ClInclude>
+    <ClInclude Include="src\md5.h">
+      <Filter>md5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sha1.h">
+      <Filter>sha</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xxtea.h">
+      <Filter>xxtea</Filter>
+    </ClInclude>
+    <ClInclude Include="src\guid.h">
+      <Filter>guid</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="b64">
+      <UniqueIdentifier>{b9cb68b1-80df-4b54-af49-8a745b20106a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="des">
+      <UniqueIdentifier>{7bc74e1b-6403-42e7-88dd-d571beb7d291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lz4">
+      <UniqueIdentifier>{560b0031-387d-4416-9644-0efc7c172892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="md5">
+      <UniqueIdentifier>{534971d3-8c06-4d3d-b999-dc8b832e9fa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sha">
+      <UniqueIdentifier>{3d83852b-0abc-48c9-b132-3d723feb4f67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="xxtea">
+      <UniqueIdentifier>{94e53936-1d20-4b64-8d36-619d64ab6fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="guid">
+      <UniqueIdentifier>{6e363c28-404c-4c19-9af2-e762d7d44b1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
