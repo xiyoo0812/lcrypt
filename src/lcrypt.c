@@ -389,7 +389,7 @@ static int lguid_new(lua_State* L) {
 }
 
 static int lguid_string(lua_State* L) {
-    int group = 0, index = 0;
+    size_t group = 0, index = 0;
     int top = lua_gettop(L);
     if (top > 1) {
         group = lua_tointeger(L, 1);
@@ -425,47 +425,42 @@ static int lguid_number(lua_State* L) {
     return 1;
 }
 
-static int lguid_group(lua_State* L) {
-    size_t guid;
+size_t lguid_fmt_number(lua_State* L) {
     if (lua_type(L, 1) == LUA_TSTRING) {
         char* chEnd = NULL;
         const char* sguid = lua_tostring(L, 1);
-        guid = strtoull(sguid, &chEnd, 16);
+        return strtoull(sguid, &chEnd, 16);
     }
     else {
-        guid = lua_tointeger(L, 1);
+        return lua_tointeger(L, 1);
     }
+}
+
+static int lguid_group(lua_State* L) {
+    size_t guid = lguid_fmt_number(L);
     lua_pushinteger(L, guid & 0x3ff);
     return 1;
 }
 
 static int lguid_index(lua_State* L) {
-    size_t guid;
-    if (lua_type(L, 1) == LUA_TSTRING) {
-        char* chEnd = NULL;
-        const char* sguid = lua_tostring(L, 1);
-        guid = _strtoui64(sguid, &chEnd, 16);
-    }
-    else {
-        guid = lua_tointeger(L, 1);
-    }
+    size_t guid = lguid_fmt_number(L);
     lua_pushinteger(L, (guid >> GROUP_BITS) & 0x3ff);
     return 1;
 }
 
-static int lguid_group_index(lua_State* L) {
-    size_t guid;
-    if (lua_type(L, 1) == LUA_TSTRING) {
-        char* chEnd = NULL;
-        const char* sguid = lua_tostring(L, 1);
-        guid = _strtoui64(sguid, &chEnd, 16);
-    }
-    else {
-        guid = lua_tointeger(L, 1);
-    }
+static int lguid_time(lua_State* L) {
+    size_t guid = lguid_fmt_number(L);
+    size_t time = (guid >> (GROUP_BITS + INDEX_BITS + SNUM_BITS)) & 0x3fffffff;
+    lua_pushinteger(L, time + BASE_TIME);
+    return 1;
+}
+
+static int lguid_source(lua_State* L) {
+    size_t guid = lguid_fmt_number(L);
     lua_pushinteger(L, guid & 0x3ff);
     lua_pushinteger(L, (guid >> GROUP_BITS) & 0x3ff);
-    return 2;
+    lua_pushinteger(L, ((guid >> (GROUP_BITS + INDEX_BITS + SNUM_BITS)) & 0x3fffffff) + BASE_TIME);
+    return 3;
 }
 
 LCRYPT_API int luaopen_lcrypt(lua_State* L)
@@ -494,7 +489,8 @@ LCRYPT_API int luaopen_lcrypt(lua_State* L)
         { "guid_number", lguid_number },
         { "guid_group", lguid_group },
         { "guid_index", lguid_index },
-        { "group_index", lguid_group_index },
+        { "guid_time", lguid_time },
+        { "guid_source", lguid_source },
 
         { NULL, NULL },
     };

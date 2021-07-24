@@ -3,11 +3,8 @@
 #include <string.h>
 #include <time.h>
 
-//基准时钟：2019 - 01 - 1 00:00 : 00
-#define BASE_TIME   1546272000
-
 //每一group独享一个id生成种子
-static int serial_inedx_table[MAX_GROUP + 1] = { 0 };
+static int serial_inedx_table[(1 << GROUP_BITS)] = { 0 };
 static time_t last_time = 0;
 
 size_t new_guid(size_t group, size_t index){
@@ -19,6 +16,7 @@ size_t new_guid(size_t group, size_t index){
     size_t serial_index = 0;
     if (now_time > last_time) {
         serial_inedx_table[group] = 0;
+        last_time = now_time;
     }
     else {
         serial_index = ++serial_inedx_table[group];
