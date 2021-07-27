@@ -167,7 +167,7 @@ static int lmd5(lua_State* L)
     const char* message = luaL_checklstring(L, 1, &data_len);
     char output[HASHSIZE];
     md5(message, data_len, output);
-    lua_pushstring(L, output);
+    lua_pushlstring(L, output, HASHSIZE);
     return 1;
 }
 
