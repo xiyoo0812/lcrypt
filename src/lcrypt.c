@@ -67,7 +67,7 @@ static int ltohex(lua_State *L)
 {
     static char hex[] = "0123456789abcdef";
     size_t sz = 0;
-    const char * text = (const char *)luaL_checklstring(L, 1, &sz);
+    const unsigned char * text = (const unsigned char *)luaL_checklstring(L, 1, &sz);
     char tmp[SMALL_CHUNK];
     char *buffer = tmp;
     if (sz > SMALL_CHUNK/2)
@@ -89,7 +89,7 @@ static int ltohex(lua_State *L)
 static int lfromhex(lua_State *L)
 {
     size_t sz = 0;
-    const char * text = luaL_checklstring(L, 1, &sz);
+    const unsigned char * text = (const unsigned char*)luaL_checklstring(L, 1, &sz);
     if (sz & 2)
     {
         return luaL_error(L, "Invalid hex text size %d", (int)sz);
@@ -536,7 +536,7 @@ LCRYPT_API int luaopen_lcrypt(lua_State* L)
         { "sha224", lsha224 },
         { "sha256", lsha256 },
         { "sha384", lsha384 },
-        { "sha256", lsha256 },
+        { "sha512", lsha512 },
         { "hmac_sha1", lhmac_sha1 },
         { "hmac_sha224", lhmac_sha224 },
         { "hmac_sha256", lhmac_sha256 },
