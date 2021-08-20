@@ -13,7 +13,7 @@ Still 100% Public Domain
 
 Corrected a problem which generated improper hash values on 16 bit machines
 Routine SHA1Update changed from
-	void SHA1Update(SHA1_CTX* context, unsigned char* data, unsigned int
+	void SHA1Update(SHA1_CTX* context, unsigned char* data, uint32_t
 len)
 to
 	void SHA1Update(SHA1_CTX* context, unsigned char* data, unsigned
@@ -30,7 +30,7 @@ be guaranteed to generate the wrong hash (e.g. Test Vector #3, a million
 "a"s).
 
 I also changed the declaration of variables i & j in SHA1Update to
-unsigned long from unsigned int for the same reason.
+unsigned long from uint32_t for the same reason.
 
 These changes should make no difference to any 32 bit implementations since
 an
@@ -322,4 +322,51 @@ void SHA1_Final(uint8_t digest[SHA1_DIGEST_SIZE], SHA1_CTX *context) {
 #ifdef SHA1HANDSOFF  /* make SHA1Transform overwrite its own static vars */
     SHA1_Transform(context->state, context->buffer);
 #endif
+}
+
+void sha1(const uint8_t* message, uint32_t len, uint8_t* digest)
+{
+    SHA1_CTX ctx;
+    SHA1_Init(&ctx);
+    SHA1_Update(&ctx, message, len);
+    SHA1_Final(digest, &ctx);
+}
+
+void xor_key(uint8_t key[SHA_BLOCKSIZE], uint32_t xorv)
+{
+    int i;
+    for (i = 0; i < SHA_BLOCKSIZE; i += sizeof(uint32_t))
+    {
+        uint32_t* k = (uint32_t*)&key[i];
+        *k ^= xorv;
+    }
+}
+
+void hmac_sha1(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint32_t text_len, uint8_t* digest)
+{
+    SHA1_CTX ctx1, ctx2;
+    uint8_t rkey[SHA_BLOCKSIZE];
+    memset(rkey, 0, SHA_BLOCKSIZE);
+    if (key_len > SHA_BLOCKSIZE)
+    {
+        SHA1_CTX ctx;
+        SHA1_Init(&ctx);
+        SHA1_Update(&ctx, key, key_len);
+        SHA1_Final(rkey, &ctx);
+        key_len = SHA1_DIGEST_SIZE;
+    }
+    else
+    {
+        memcpy(rkey, key, key_len);
+    }
+    xor_key(rkey, 0x5c5c5c5c);
+    SHA1_Init(&ctx1);
+    SHA1_Update(&ctx1, rkey, SHA_BLOCKSIZE);
+    xor_key(rkey, 0x5c5c5c5c ^ 0x36363636);
+    SHA1_Init(&ctx2);
+    SHA1_Update(&ctx2, rkey, SHA_BLOCKSIZE);
+    SHA1_Update(&ctx2, text, text_len);
+    SHA1_Final(digest, &ctx2);
+    SHA1_Update(&ctx1, digest, SHA1_DIGEST_SIZE);
+    SHA1_Final(digest, &ctx1);
 }

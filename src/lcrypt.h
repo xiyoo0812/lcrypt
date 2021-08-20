@@ -22,6 +22,7 @@ extern "C" {
 #include "lz4.h"
 #include "md5.h"
 #include "sha1.h"
+#include "sha2.h"
 #include "xxtea.h"
 #include "des56.h"
 #include "base64.h"

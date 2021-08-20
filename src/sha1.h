@@ -31,17 +31,14 @@ typedef SHA1_CTX SHA_CTX;
 /** SHA-1 Digest size in bytes (OpenSSL compat) */
 #define SHA_DIGEST_LENGTH SHA1_DIGEST_SIZE
 
-LCRYPT_API void SHA1_Init(SHA1_CTX *context);
+void SHA1_Init(SHA1_CTX *context);
 
-LCRYPT_API void SHA1_Update(SHA1_CTX *context, const void *p, size_t len);
+void SHA1_Update(SHA1_CTX *context, const void *p, size_t len);
 
-LCRYPT_API void SHA1_Final(uint8_t digest[SHA1_DIGEST_SIZE], SHA1_CTX *context);
+void SHA1_Final(uint8_t digest[SHA1_DIGEST_SIZE], SHA1_CTX *context);
 
-LCRYPT_API void hmac_sha1(const uint8_t *k,   /* secret key */
-        size_t lk,  /* length of the key in bytes */
-        const uint8_t *d,   /* data */
-        size_t ld,  /* length of data in bytes */
-        uint8_t *out, /* output buffer, at least "t" bytes */
-        size_t *t);
+LCRYPT_API void sha1(const uint8_t* message, uint32_t len, uint8_t* digest);
+
+LCRYPT_API void hmac_sha1(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint32_t text_len, uint8_t* digest);
 
 #endif // SHA_H_

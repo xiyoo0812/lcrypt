@@ -23,6 +23,9 @@
     <ClCompile Include="src\guid.c">
       <Filter>guid</Filter>
     </ClCompile>
+    <ClCompile Include="src\sha2.c">
+      <Filter>sha</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\lcrypt.h" />
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="src\guid.h">
       <Filter>guid</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sha2.h">
+      <Filter>sha</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
