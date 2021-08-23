@@ -616,26 +616,22 @@ void hmac_sha224(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint
     memset(rkey, 0, SHA224_BLOCK_SIZE);
     if (key_len > SHA224_BLOCK_SIZE)
     {
-        sha224_ctx ctx;
-        sha224_init(&ctx);
-        sha224_update(&ctx, key, key_len);
-        sha224_final(rkey, &ctx);
-        key_len = SHA224_DIGEST_SIZE;
+        sha224(key, key_len, rkey);
     }
     else
     {
         memcpy(rkey, key, key_len);
     }
-    xor_key(rkey, 0x5c5c5c5c);
+    xor_key_256(rkey, 0x5c5c5c5c);
     sha224_init(&ctx1);
     sha224_update(&ctx1, rkey, SHA224_BLOCK_SIZE);
     xor_key_256(rkey, 0x5c5c5c5c ^ 0x36363636);
     sha224_init(&ctx2);
     sha224_update(&ctx2, rkey, SHA224_BLOCK_SIZE);
     sha224_update(&ctx2, text, text_len);
-    sha224_final(digest, &ctx2);
+    sha224_final(&ctx2, digest);
     sha224_update(&ctx1, digest, SHA224_DIGEST_SIZE);
-    sha224_final(digest, &ctx1);
+    sha224_final(&ctx1, digest);
 }
 
 void hmac_sha256(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint32_t text_len, uint8_t* digest)
@@ -645,26 +641,22 @@ void hmac_sha256(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint
     memset(rkey, 0, SHA256_BLOCK_SIZE);
     if (key_len > SHA256_BLOCK_SIZE)
     {
-        sha256_ctx ctx;
-        sha256_init(&ctx);
-        sha256_update(&ctx, key, key_len);
-        sha256_final(rkey, &ctx);
-        key_len = SHA256_DIGEST_SIZE;
+        sha256(key, key_len, rkey);
     }
     else
     {
         memcpy(rkey, key, key_len);
     }
-    xor_key(rkey, 0x5c5c5c5c);
+    xor_key_256(rkey, 0x5c5c5c5c);
     sha256_init(&ctx1);
     sha256_update(&ctx1, rkey, SHA256_BLOCK_SIZE);
     xor_key_256(rkey, 0x5c5c5c5c ^ 0x36363636);
     sha256_init(&ctx2);
     sha256_update(&ctx2, rkey, SHA256_BLOCK_SIZE);
     sha256_update(&ctx2, text, text_len);
-    sha256_final(digest, &ctx2);
+    sha256_final(&ctx2, digest);
     sha256_update(&ctx1, digest, SHA256_DIGEST_SIZE);
-    sha256_final(digest, &ctx1);
+    sha256_final(&ctx1, digest);
 }
 
 void xor_key_512(uint8_t key[SHA512_BLOCK_SIZE], uint32_t xor) {
@@ -682,26 +674,22 @@ void hmac_sha384(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint
     memset(rkey, 0, SHA384_BLOCK_SIZE);
     if (key_len > SHA384_BLOCK_SIZE)
     {
-        sha384_ctx ctx;
-        sha384_init(&ctx);
-        sha384_update(&ctx, key, key_len);
-        sha384_final(rkey, &ctx);
-        key_len = SHA384_DIGEST_SIZE;
+        sha384(key, key_len, rkey);
     }
     else
     {
         memcpy(rkey, key, key_len);
     }
-    xor_key(rkey, 0x5c5c5c5c);
+    xor_key_512(rkey, 0x5c5c5c5c);
     sha384_init(&ctx1);
     sha384_update(&ctx1, rkey, SHA384_BLOCK_SIZE);
     xor_key_512(rkey, 0x5c5c5c5c ^ 0x36363636);
     sha384_init(&ctx2);
     sha384_update(&ctx2, rkey, SHA384_BLOCK_SIZE);
     sha384_update(&ctx2, text, text_len);
-    sha384_final(digest, &ctx2);
+    sha384_final(&ctx2, digest);
     sha384_update(&ctx1, digest, SHA384_DIGEST_SIZE);
-    sha384_final(digest, &ctx1);
+    sha384_final(&ctx1, digest);
 }
 
 void hmac_sha512(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint32_t text_len, uint8_t* digest)
@@ -711,24 +699,20 @@ void hmac_sha512(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint
     memset(rkey, 0, SHA512_BLOCK_SIZE);
     if (key_len > SHA512_BLOCK_SIZE)
     {
-        sha512_ctx ctx;
-        sha512_init(&ctx);
-        sha512_update(&ctx, key, key_len);
-        sha512_final(rkey, &ctx);
-        key_len = SHA512_DIGEST_SIZE;
+        sha512(key, key_len, rkey);
     }
     else
     {
         memcpy(rkey, key, key_len);
     }
-    xor_key(rkey, 0x5c5c5c5c);
+    xor_key_512(rkey, 0x5c5c5c5c);
     sha512_init(&ctx1);
     sha512_update(&ctx1, rkey, SHA512_BLOCK_SIZE);
     xor_key_512(rkey, 0x5c5c5c5c ^ 0x36363636);
     sha512_init(&ctx2);
     sha512_update(&ctx2, rkey, SHA512_BLOCK_SIZE);
     sha512_update(&ctx2, text, text_len);
-    sha512_final(digest, &ctx2);
+    sha512_final(&ctx2, digest);
     sha512_update(&ctx1, digest, SHA512_DIGEST_SIZE);
-    sha512_final(digest, &ctx1);
+    sha512_final(&ctx1, digest);
 }

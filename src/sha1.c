@@ -349,11 +349,7 @@ void hmac_sha1(const uint8_t* key, uint32_t key_len, const uint8_t* text, uint32
     memset(rkey, 0, SHA_BLOCKSIZE);
     if (key_len > SHA_BLOCKSIZE)
     {
-        SHA1_CTX ctx;
-        SHA1_Init(&ctx);
-        SHA1_Update(&ctx, key, key_len);
-        SHA1_Final(rkey, &ctx);
-        key_len = SHA1_DIGEST_SIZE;
+        sha1(key, key_len, rkey);
     }
     else
     {
