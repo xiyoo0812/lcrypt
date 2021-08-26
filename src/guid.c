@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-//每一group独享一个id生成种子
+//姣忎竴group鐙韩涓�涓猧d鐢熸垚绉嶅瓙
 static int serial_inedx_table[(1 << GROUP_BITS)] = { 0 };
 static time_t last_time = 0;
 
@@ -20,7 +20,7 @@ size_t new_guid(size_t group, size_t index){
     }
     else {
         serial_index = ++serial_inedx_table[group];
-        //种子溢出以后，时钟往前推
+        //绉嶅瓙婧㈠嚭浠ュ悗锛屾椂閽熷線鍓嶆帹
         if (serial_index >= MAX_SNUM) {
             serial_inedx_table[group] = 0;
             last_time = ++now_time;
