@@ -1,80 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\lcrypt.c" />
-    <ClCompile Include="src\base64.c">
-      <Filter>b64</Filter>
-    </ClCompile>
-    <ClCompile Include="src\des56.c">
-      <Filter>des</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lz4.c">
-      <Filter>lz4</Filter>
-    </ClCompile>
-    <ClCompile Include="src\md5.c">
-      <Filter>md5</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sha1.c">
-      <Filter>sha</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xxtea.c">
-      <Filter>xxtea</Filter>
-    </ClCompile>
-    <ClCompile Include="src\guid.c">
-      <Filter>guid</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sha2.c">
-      <Filter>sha</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\lcrypt.h" />
-    <ClInclude Include="src\base64.h">
-      <Filter>b64</Filter>
+    <ClInclude Include="src/base64.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\des56.h">
-      <Filter>des</Filter>
+    <ClInclude Include="src/des56.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\lz4.h">
-      <Filter>lz4</Filter>
+    <ClInclude Include="src/guid.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\md5.h">
-      <Filter>md5</Filter>
+    <ClInclude Include="src/lcrypt.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\sha1.h">
-      <Filter>sha</Filter>
+    <ClInclude Include="src/lz4.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\xxtea.h">
-      <Filter>xxtea</Filter>
+    <ClInclude Include="src/md5.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\guid.h">
-      <Filter>guid</Filter>
+    <ClInclude Include="src/sha1.h">
+      <Filter>inc</Filter>
     </ClInclude>
-    <ClInclude Include="src\sha2.h">
-      <Filter>sha</Filter>
+    <ClInclude Include="src/sha2.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="src/xxtea.h">
+      <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="b64">
-      <UniqueIdentifier>{b9cb68b1-80df-4b54-af49-8a745b20106a}</UniqueIdentifier>
+    <ClCompile Include="src/base64.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/des56.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/guid.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/lcrypt.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/lz4.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/md5.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/sha1.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/sha2.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src/xxtea.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier >{25D902C2-4283-AB8C-FBAC-54DFA101AD31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="des">
-      <UniqueIdentifier>{7bc74e1b-6403-42e7-88dd-d571beb7d291}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lz4">
-      <UniqueIdentifier>{560b0031-387d-4416-9644-0efc7c172892}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="md5">
-      <UniqueIdentifier>{534971d3-8c06-4d3d-b999-dc8b832e9fa4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sha">
-      <UniqueIdentifier>{3d83852b-0abc-48c9-b132-3d723feb4f67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="xxtea">
-      <UniqueIdentifier>{94e53936-1d20-4b64-8d36-619d64ab6fab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="guid">
-      <UniqueIdentifier>{6e363c28-404c-4c19-9af2-e762d7d44b1e}</UniqueIdentifier>
+    <Filter Include="inc">
+      <UniqueIdentifier >{CF9F3FDE-7326-F1D8-E642-05F0E07A3695}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
