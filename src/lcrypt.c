@@ -14,10 +14,6 @@
 #include <memory.h>
 #include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 static int lrandomkey(lua_State *L)
 {
     char tmp[8];
@@ -526,52 +522,44 @@ static int lxor_byte(lua_State *L) {
 	return 1;
 }
 
-LCRYPT_API int luaopen_lcrypt(lua_State* L)
-{
+static const luaL_Reg lcrypt_funcs[] = {
+    { "md5", lmd5 },
+    { "sha1", lsha1 },
+    { "sha224", lsha224 },
+    { "sha256", lsha256 },
+    { "sha384", lsha384 },
+    { "sha512", lsha512 },
+    { "hmac_sha1", lhmac_sha1 },
+    { "hmac_sha224", lhmac_sha224 },
+    { "hmac_sha256", lhmac_sha256 },
+    { "hmac_sha384", lhmac_sha384 },
+    { "hmac_sha512", lhmac_sha512 },
+    { "hashkey", lhashkey },
+    { "randomkey", lrandomkey },
+    { "hex_encode", ltohex },
+    { "hex_decode", lfromhex },
+    { "des_encode", des56_crypt },
+    { "des_encode", des56_decrypt },
+    { "lz4_encode", lz4_encode },
+    { "lz4_decode", lz4_decode },
+    { "b64_encode", lbase64_encode },
+    { "b64_decode", lbase64_decode },
+    { "xxtea_encode", lxxtea_encode },
+    { "xxtea_decode", lxxtea_decode },
+    { "guid_new", lguid_new },
+    { "guid_string", lguid_string },
+    { "guid_tostring", lguid_tostring },
+    { "guid_number", lguid_number },
+    { "guid_group", lguid_group },
+    { "guid_index", lguid_index },
+    { "guid_time", lguid_time },
+    { "guid_source", lguid_source },
+    { "xor_byte", lxor_byte },
+    { NULL, NULL },
+};
+
+LCRYPT_API int luaopen_lcrypt(lua_State* L) {
     luaL_checkversion(L);
-
-    luaL_Reg l[] = {
-        { "md5", lmd5 },
-        { "sha1", lsha1 },
-        { "sha224", lsha224 },
-        { "sha256", lsha256 },
-        { "sha384", lsha384 },
-        { "sha512", lsha512 },
-        { "hmac_sha1", lhmac_sha1 },
-        { "hmac_sha224", lhmac_sha224 },
-        { "hmac_sha256", lhmac_sha256 },
-        { "hmac_sha384", lhmac_sha384 },
-        { "hmac_sha512", lhmac_sha512 },
-        { "hashkey", lhashkey },
-        { "randomkey", lrandomkey },
-        { "hex_encode", ltohex },
-        { "hex_decode", lfromhex },
-        { "des_encode", des56_crypt },
-        { "des_encode", des56_decrypt },
-        { "lz4_encode", lz4_encode },
-        { "lz4_decode", lz4_decode },
-        { "b64_encode", lbase64_encode },
-        { "b64_decode", lbase64_decode },
-        { "xxtea_encode", lxxtea_encode },
-        { "xxtea_decode", lxxtea_decode },
-        { "guid_new", lguid_new },
-        { "guid_string", lguid_string },
-        { "guid_tostring", lguid_tostring },
-        { "guid_number", lguid_number },
-        { "guid_group", lguid_group },
-        { "guid_index", lguid_index },
-        { "guid_time", lguid_time },
-        { "guid_source", lguid_source },
-        { "xor_byte", lxor_byte },
-
-        { NULL, NULL },
-    };
-
-    luaL_newlib(L, l);
-
+    luaL_newlib(L, lcrypt_funcs);
     return 1;
 }
-
-#ifdef __cplusplus
-}
-#endif
