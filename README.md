@@ -12,6 +12,9 @@
 - msvc: 准备好lua依赖库并放到指定位置，将proj文件加到sln后编译。
 - linux: 准备好lua依赖库并放到指定位置，执行make -f lcrypt.mak
 
+# 注意事项
+- mimalloc: 参考[quanta](https://github.com/xiyoo0812/quanta.git)使用，不用则在工程文件中注释
+
 # 用法
 ```lua
 --crypt_test.lua
@@ -36,23 +39,6 @@ local lhmac_sha256  = lcrypt.hmac_sha256
 local lhmac_sha384  = lcrypt.hmac_sha384
 local lhmac_sha512  = lcrypt.hmac_sha512
 
---guid
-----------------------------------------------------------------
-local guid = lcrypt.guid_new(5, 512)
-local sguid = lcrypt.guid_tostring(guid)
-log_info("newguid-> guid: %s, n2s: %s", guid, sguid)
-local nguid = lcrypt.guid_number(sguid)
-local s2guid = lcrypt.guid_tostring(nguid)
-log_info("convert-> guid: %s, n2s: %s", nguid, s2guid)
-local nsguid = lcrypt.guid_string(5, 512)
-log_info("newguid: %s", nsguid)
-local group = lcrypt.guid_group(nsguid)
-local index = lcrypt.guid_index(guid)
-local time = lcrypt.guid_time(guid)
-log_info("ssource-> group: %s, index: %s, time:%s", group, index, time)
-local group2, index2, time2 = lcrypt.guid_source(guid)
-log_info("nsource-> group: %s, index: %s, time:%s", group2, index2, time2)
-
 --base64
 local ran = lrandomkey()
 local nonce = lb64encode(ran)
@@ -74,7 +60,7 @@ log_info("sha512: %s", sha512)
 
 --md5
 local omd5 = lmd5(value)
-local nmd5 = lmd5(value, true)
+local nmd5 = lmd5(value, 1)
 local hmd5 = lhex_encode(omd5)
 log_info("md5: %s", nmd5)
 log_info("omd5: %s, hmd5: %s", omd5, hmd5)
